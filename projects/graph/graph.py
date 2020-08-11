@@ -153,11 +153,10 @@ class Graph:
         path = path + [starting_vertex]
         visited.add(starting_vertex)
         if starting_vertex == destination_vertex:
-            print("path is",path)
             return path
         for neighbor in self.get_neighbors(starting_vertex):
             if neighbor not in visited:
-                p =  self.dfs_recursive(neighbor, destination_vertex, visited, path)
+                p = self.dfs_recursive(neighbor, destination_vertex, visited, path)
                 if p:
                     return p
 
