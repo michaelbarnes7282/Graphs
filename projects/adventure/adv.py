@@ -54,7 +54,7 @@ def make_path():
         else:
             visited[player.current_room.id] = {}
             path.append(direction)
-            path.extend(make_path())
+            path += make_path()
             player.travel(opposites[direction])
             path.append(opposites[direction])
     return path
