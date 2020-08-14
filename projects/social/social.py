@@ -97,7 +97,6 @@ class SocialGraph:
 
         while q.size() > 0:
             path = q.dequeue()
-            # print('path is ', path)
             node = path[-1]
             if node not in visited:
                 for friend in self.friendships[node]:
