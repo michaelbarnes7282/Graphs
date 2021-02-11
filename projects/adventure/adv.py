@@ -5,9 +5,21 @@ from world import World
 import random
 from ast import literal_eval
 
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
 # Load world
 world = World()
-
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
@@ -29,12 +41,31 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+player.current_room = world.starting_room
+opposites = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
+visited = {}
 
+def make_path():
+    path = []
+    for direction in player.current_room.get_exits():
+        player.travel(direction)
+        if player.current_room.id in visited:
+            player.travel(opposites[direction])
+        else:
+            visited[player.current_room.id] = {}
+            path.append(direction)
+            path += make_path()
+            player.travel(opposites[direction])
+            path.append(opposites[direction])
+    return path
+traversal_path = make_path()
 
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
 visited_rooms.add(player.current_room)
+
+
 
 for move in traversal_path:
     player.travel(move)
@@ -51,12 +82,12 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
